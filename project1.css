@@ -1,0 +1,94 @@
+/*	CSc 4370 - Web Programming
+	- Project 1
+	- Cliff Chandler & Ali Shaheen
+*/
+
+body {
+	background-image: url("pictures/rocship.jpg");
+}
+
+.homepage {
+	width: 800px;
+	height: 525px;
+	margin-left: auto;
+	margin-right: auto;
+	opacity: .7;
+}
+
+p.descr {
+	padding: 5px 10%;
+	text-align: justify;
+}
+
+/* section to respond on mouse over/hover and click/active */
+.mouseover {
+	position: relative;
+	display: block;
+	width: 600px;
+	height: 400px;
+	background-image: url("pictures/rocket_pressure.gif");
+	background-repeat: no-repeat;
+	margin: 20px auto 20px auto;
+}
+
+/*
+	NOTE, other properties persist, so only necessary to change image
+	since they have all been scaled to fit into the same region
+*/
+
+/* what happens during moused over/hover */
+.mouseover:hover {
+	background-image: url("pictures/rocket_horizontal1.png");
+}
+
+/* what happens while clicked/active (must hold mouse down) */
+.mouseover:active {
+	background-image: url("pictures/rocket_vertical1.png");
+}
+
+.trw-t{
+	border: 3px solid black;
+}
+
+/*Header 1 font color is red*/
+h1 {
+	color: red;
+	background-color: black;
+	text-align: center;
+}
+
+/*Mouse hovering changes link background to white */
+a:hover {
+	background-color: cyan;
+}
+
+/* the button that displays the gif of the SpaceX landing */
+button {
+	display: block;
+	margin: 20px auto 20px auto;
+	width: 480px;
+	height: 268px;
+	position:relative;	
+}
+
+/*Navigation borders */
+
+
+button:active {
+	background-image: url("pictures/landing.gif");
+}
+
+/* the vasimr image and gif */
+.vasimr {
+	width: 550px;
+	height: 337px;
+	background-image: url("pictures/vasimrdiagram1.gif");
+	background-repeat: no-repeat;
+	display: block;
+	margin: 20px auto 20px auto;
+	position: relative;
+}
+
+.vasimr:hover {
+	background-image: url("pictures/vasimr.gif");
+}
