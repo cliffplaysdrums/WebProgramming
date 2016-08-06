@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!-- CSc 4370 - Web Programming
+	- Project 3
+	- Cliff Chandler
+-->
+<html>
+<head>
+<title>Sample</title>
+</head>
+<body>
+<style type="text/css">
+.alive {
+	padding: 0;
+	background: -webkit-radial-gradient(); /* For Safari 5.1 to 6.0 */
+   background: -o-radial-gradient(rgb(0,0,0), rgb(0,255,0), rgb(0,0,0)); /* For Opera 11.6 to 12.0 */
+   background: -moz-radial-gradient(rgb(0,0,0), rgb(0,255,0), rgb(0,0,0)); /* For Fx 3.6 to 15 */
+   background: radial-gradient(rgb(0,255,0), rgb(0,0,0)); /* Standard syntax (must be last) */
+}
+
+.dead {
+	background-color: rgb(0, 0, 0);
+}
+
+.centered {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#gameBoard {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+</style>
+<p class="centered">Rows:<input type="number" id="rows">
+Columns:<input type="number" id="cols">
+<button onclick="setSize()">Set Size</button></p>
+<p class="centered">
+
+<button id="startButton" onclick="start()">Start</button>
+<button id="stopButton" onclick="stop()">Stop</button>
+<button onclick="advanceGeneration()">Increment 1</button>
+<button onclick="advance23()">Advance 23</button>
+<button onclick="randomPop()">Random</button></p>
+
+<table id="gameBoard" border="thin">
+</table>
+
+<div class="centered">
+<h3>Instructions:</h3>
+<p>Set the game board size by selecting the number of rows and columns and pressing "Set Size."<br>
+Click cells to populate them or press the random button.<br>
+Press "Start" to begin the game at full speed. Press "Stop" to stop the game where it is.<br>
+Press "Increment 1" to advance forward a single generation or "Increment 23" to advance 23 generations.
+</p></div>
+
+<script>
+var ROWS = 6;
+var COLS = 6;
+var advanceInterval = 200;
+
+var started = false;
+
+var gameBoard = document.getElementById('gameBoard');
+init();
+
+function init() {
+
+	for (var i=0; i<ROWS; i++) {
+		var row = gameBoard.insertRow(i);
+		for (var k=0; k<COLS; k++) {
+			var index = getCurrent(i, k);
+			cell = row.insertCell(k);
+			cell.setAttribute('id', index);
+			cell.setAttribute('class', 'dead');
+			cell.setAttribute('height', '20px');
+			cell.setAttribute('width', '20px');
+			cell.setAttribute('onclick', 'changeBackground(' + index.toString() + ')');
+		}
+	}
+}
+
+
+function changeBackground(id) {
+	var elem = document.getElementById(id);
+	var cssClass = elem.getAttribute('class');
+	
+	if (cssClass === 'dead') {
+		elem.setAttribute('class', 'alive');
+	} else {
+		elem.setAttribute('class', 'dead');
+	}	
+}
+
+function lifeOrDeath(index) {
+	// console.log(document.getElementById(getBelow(index)).getAttribute('class'));
+	// console.log(getLeft(index));
+	
+	var neighborsAlive = 0;
+	if (document.getElementById(String(getAbove(index))).getAttribute('class') == 'alive') neighborsAlive++;
+	if (document.getElementById((getRight(index)).toString()).getAttribute('class') == 'alive') neighborsAlive++;
+	// console.log("curr: " + index + "\tLeft: " + String(getLeft(index)));
+	if (document.getElementById((getLeft(index)).toString()).getAttribute('class') == 'alive') neighborsAlive++;
+	if (document.getElementById((getBelow(index)).toString()).getAttribute('class') == 'alive') neighborsAlive++;
+	if (document.getElementById((getAboveAndRight(index)).toString()).getAttribute('class') == 'alive') neighborsAlive++;
+	//console.log((getAboveAndLeft(index)));
+	if (document.getElementById((getAboveAndLeft(index)).toString()).getAttribute('class') == 'alive') neighborsAlive++;
+	if (document.getElementById((getBelowAndRight(index)).toString()).getAttribute('class') == 'alive') neighborsAlive++;
+	if (document.getElementById((getBelowAndLeft(index)).toString()).getAttribute('class') == 'alive') neighborsAlive++;
+	
+	// if neighbors alive is 2, do nothing
+	if (neighborsAlive != 2) {
+		if (neighborsAlive == 3) { 
+			// console.log(index.toString() + ": 3 alive");
+			return 1;
+		} else {
+			// console.log(index.toString() + ": dies");
+			return 0;
+		}
+	}	else {
+		// console.log(index.toString() + ": unchanged");
+		return 2;	
+	}
+}
+
+function getCurrent(row, col) {
+	// console.log(row*COLS + col);
+	return (row*COLS + col);
+}
+
+function getBelowAndLeft(index) {
+	return getBelow(getLeft(index));
+}
+
+function getBelowAndRight(index) {
+	return getBelow(getRight(index));
+}
+
+function getAboveAndRight(index) {
+	return getAbove(getRight(index));
+}
+
+function getAboveAndLeft(index) {
+	return getAbove(getLeft(index));
+}
+
+function getBelow(index) {
+	return ((Number(index) + COLS) % (ROWS*COLS));
+}
+
+function getAbove(index) {
+	var above = Number(index) - COLS;
+	if (above < 0) above = Number(index) + (ROWS - 1)*(COLS) ;
+	return above;
+}
+
+function getRight(index) {
+	var rightIndex = Number(index) + 1;
+	if (rightIndex % COLS == 0) {
+		rightIndex -= COLS;
+	}
+	return rightIndex;
+}
+
+function getLeft(index) {
+	if (index % COLS == 0) {
+		console.log("return: " + (Number(index) + Number(COLS)));
+		return (Number(index) + Number(COLS) - 1);
+	} else {
+		return (Number(index) - 1);
+	}
+}
+
+function stop() {
+	clearInterval(timer);
+	started = false;
+}
+
+function start() {
+	if (started == false) {
+		timer = setInterval(advanceGeneration, advanceInterval);
+		started = true;
+	}
+}
+
+function advance23() {
+	for (var i=0; i<23; i++) {
+		advanceGeneration();
+	}
+}
+
+function setSize() {
+	while (gameBoard.rows.length > 0) {
+		gameBoard.deleteRow(0);
+	}
+
+	ROWS = (document.getElementById('rows').value);
+	COLS = (document.getElementById('cols').value);
+	
+	init();
+}
+
+function randomPop() {
+	for (var row=0; row<ROWS; row++) {
+		for (var col=0; col<COLS; col++) {
+			index = getCurrent(row, col);
+			if (Math.random() >= .5) {
+				document.getElementById(index).setAttribute('class', 'alive');
+			} else {
+				document.getElementById(index).setAttribute('class', 'dead');
+			}
+		}
+	}
+}
+
+function advanceGeneration() {
+	var nextGen = [];
+	for (var row=0; row<ROWS; row++) {
+		for (var col=0; col<COLS; col++) {
+			var index = getCurrent(row, col);
+			nextGen[index] = lifeOrDeath(index);
+		}
+	}
+	
+	for (var row=0; row<ROWS; row++) {
+		for (var col=0; col<COLS; col++) {
+			var index = getCurrent(row, col);
+			if (nextGen[index] != 2) {
+				if (nextGen[index] == 1) {
+					document.getElementById(index).setAttribute('class', 'alive');
+				} else {
+					document.getElementById(index).setAttribute('class', 'dead');
+				}
+			}
+		}
+	}
+}
+</script>
+
+</body>
+</html>
