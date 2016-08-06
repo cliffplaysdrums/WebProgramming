@@ -1,0 +1,68 @@
+/* Layout for search.php
+ * Add this to the main project css or use both if there are no conflicts
+*/
+
+.left {
+	float: left;
+	width: 55%;
+}
+
+.right {
+	float: left;
+	margin-left: 50px;
+	background-color: rgba(140, 140, 140, 0.6);
+	width: 40%;
+}
+
+.submittedIdeas {
+	background-color: rgba(140, 140, 140, 0.6);
+}
+
+table.submittedIdeasTbl {
+	margin: 0px;
+}
+
+.submittedIdeas td {
+	margin-bottom: 15px;
+}
+
+.submittedIdeas td:nth-child(even) {
+	width: 80%;
+	padding-left: 12px;
+	text-align: center;
+}
+
+.submittedIdeas tr:nth-child(even) {
+	background-color: #336;
+	color: #EEF;
+}
+
+.thrust_images {
+	position: relative;
+	display: block;
+	width: 600px;
+	height: 352px;
+	background-image: url("pictures/rocket_pressure.gif");
+	background-repeat: no-repeat;
+	margin: 20px;
+	margin-left: 80px;
+	float: left;
+}
+
+.thrust_images:hover {
+	background-image: url("pictures/rocket_horizontal1.png");
+}
+
+.rightimg {
+	margin-left: 0;
+}
+
+div.content {
+	margin-left: 100px;
+	margin-right: 100px;
+}
+
+.trending {
+	text-align: left;
+	margin-left: 50px;
+}
